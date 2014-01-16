@@ -1,16 +1,16 @@
 Cakeforms
 =============
 * Version: 2.0
-* Author: Sam Bernard (sam@sambernard.net), updated to CakePHP 2.x/Croogo 1.4 by Peter Jacobson (dev@linkingarts.com)
+* Author: Sam Bernard (sam@sambernard.net), updated to CakePHP 2.x/Croogo 1.5.x by Peter Jacobson (dev@linkingarts.com)
 * Website: <http://sambernard.net>
 
-An easy to use CakePHP 2.x form plugin inspired by the amazing [Cforms] plugin for Wordpress.
+An easy to use Croogo 1.5.x form plugin inspired by the amazing [Cforms] plugin for Wordpress.
 
 [cforms]: http://www.deliciousdays.com/cforms-plugin/
 
 Requirements
 -----------
-* Croogo 1.4
+* Croogo 1.5.x
 
 Features
 -----------
