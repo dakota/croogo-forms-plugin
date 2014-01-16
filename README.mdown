@@ -28,7 +28,7 @@ Installation
 2. Run the sql file `Cforms/Config/sql/cakeforms.sql`
 3. Login to Croogo and activate the plugin.
 4. **IMPORTANT:** until there is a fix, you must add your submission views to Croogo. Copy the directory contents from
-app/Plugin/Cforms/View/Elements/email/* to app/Plugin/Croogo/View/Plugin/Cforms/Emails/*
+`app/Plugin/Cforms/View/Elements/email/*` to `app/Plugin/Croogo/View/Plugin/Cforms/Emails/*`
 
 Brokeded Stuffs
 -----------

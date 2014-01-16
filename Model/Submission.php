@@ -22,7 +22,8 @@ class Submission extends CformsAppModel {
 		$this->save();
 		$id = $this->id;
 		
-		$formFields = array('Submission' => array('id' => $id));
+		$formFields = array('Submission' => array('id' => $id,'email' => $data['Form']['email']));
+		//pr ($data);die;
 		foreach($data['Form'] as $formField => $response){
 			if(is_array($response)){
 				$response = implode("\n", $response);

@@ -7,9 +7,7 @@ echo $this->Html->script(array('/cforms/js/cforms/admin_edit.js'));
 <div class="cforms form">
 <h2>Edit Form</h2>
 <div class="actions">
-    <ul>
-        <li><?php echo $this->Html->link(__('Back to Index', true), array('controller' => 'cforms', 'action' => 'index')); ?></li>
-    </ul>
+    <?php echo $this->Html->link(__('%s Back to Index', '<i class="icon icon-arrow-left"></i>'), array('controller' => 'cforms', 'action' => 'index'),array('class' => 'btn btn-small','escape' => false)); ?> <?php if(!empty($this->params['pass'])){echo $this->Html->link(__('Export Records', true), array('controller' => 'submissions', 'action' => 'export', $this->params['pass'][0]),array('class' => 'btn btn-small btn-info'));} ?>
 </div>
 <?php echo $this->Form->create('Cform');?>
 	<?php
