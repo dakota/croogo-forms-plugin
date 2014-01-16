@@ -4,7 +4,7 @@ App::uses('CakeEmail', 'Network/Email');
 
 class CformsComponent extends Object{
 
-        public $components = array('RequestHandler', 'Email');
+        public $components = array('RequestHandler');
 
 /**
  * Holds the data required to build the form
@@ -278,15 +278,14 @@ class CformsComponent extends Object{
                             $this->Submission->Cform->id = $id;
                             $formName = $this->Submission->Cform->field('name');
 
+                            $this->request->data['Submission']['cform_id'] = $this->request->controller->data['Submission']['cform_id'];
                             $this->request->data['Submission']['name'] = $formName;
-                            //$this->request->data['Submission']['ip'] = ip2long($this->RequestHandler->getClientIP());
-                            $this->request->data['Submission']['page'] = $this->request->controller->here;
+                            $this->request->data['Submission']['ip'] = ip2long($this->request->controller->data['Submission']['ip']);
+                            $this->request->data['Submission']['page'] = (Router::url('',false));
 
 
                             $controllerMethods = get_class_methods($this->request->controller);
-
                             $saveToDb = true;
-
                             if(in_array('beforeCformsSave', $controllerMethods))
                             {
                                 $saveToDb = $this->request->controller->beforeCformsSave($this->request->controller->data);

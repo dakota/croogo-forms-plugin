@@ -23,7 +23,7 @@ class SubmissionsController extends CformsAppController {
 	}
 
 	function admin_index() {
-		$this->Submission->recursive = 0;
+		$this->Submission->recursive = 2;
 		$this->set('submissions', $this->paginate());
 	}
 
@@ -35,19 +35,32 @@ class SubmissionsController extends CformsAppController {
 		$this->set('submission', $this->Submission->read(null, $id));
 	}
 
-	function admin_delete($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for Submission', true));
+
+/**
+ * admin_delete method
+ *
+ * @throws MethodNotAllowedException
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_delete($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+		$this->Submission->id = $id;
+		if (!$this->Submission->exists()) {
+			throw new NotFoundException(__('Invalid Submission'));
+		}
+		if ($this->Submission->delete()) {
+			$this->Session->setFlash(__('Submission deleted'));
 			$this->redirect(array('action' => 'index'));
 		}
-		if ($this->Submission->del($id)) {
-			$this->Session->setFlash(__('Submission deleted', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->Session->setFlash(__('The Submission could not be deleted. Please, try again.', true));
+		$this->Session->setFlash(__('Submission was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
-
+	
+	
 	function view_upload($encodedPath = false){
 		$file = base64_decode($encodedPath);
 		//First, see if the file exists
@@ -104,6 +117,11 @@ class SubmissionsController extends CformsAppController {
 		  header("Content-Length: ".$len);
 		  @readfile($file);
 		  exit;
+	}
+	
+	function beforeCformsSave($data){
+	}	
+	function afterCformsSave($data){
 	}
 
 }

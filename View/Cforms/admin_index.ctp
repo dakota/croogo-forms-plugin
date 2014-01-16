@@ -1,10 +1,8 @@
 <div class="cforms index">
 <h2><?php __('Cforms');?></h2>
 
-<div class="actions">
-    <ul>
-        <li><?php echo $this->Html->link('Add new form', array('action' => 'add'));?></li>
-    </ul>
+<div class="actions">    
+	<?php echo $this->Html->link(__('%s Add New Form', '<i class="icon icon-plus"></i>'), array('action' => 'add'),array('class' => 'btn btn-small','escape' => false)); ?>
 </div>
 
 <table class="table table-striped table-bordered">
