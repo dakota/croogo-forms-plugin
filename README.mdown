@@ -1,16 +1,16 @@
 Cakeforms
 =============
-* Version: 0.9
-* Author: Sam Bernard (sam@sambernard.net)
+* Version: 2.0
+* Author: Sam Bernard (sam@sambernard.net), updated to CakePHP 2.x/Croogo 1.4 by Peter Jacobson (dev@linkingarts.com)
 * Website: <http://sambernard.net>
 
-An easy to use form plugin inspired by the amazing [Cforms] plugin for Wordpress.
+An easy to use CakePHP 2.x form plugin inspired by the amazing [Cforms] plugin for Wordpress.
 
 [cforms]: http://www.deliciousdays.com/cforms-plugin/
 
 Requirements
 -----------
-* Croogo 1.3.2
+* Croogo 1.4
 
 Features
 -----------
@@ -20,14 +20,27 @@ Features
 * Database Tracking
 * CSV Export
 * Embed form anywhere using component and helper
+* Twitter Bootstrap GUI updates
 
 Installation
 -----------
-1. Upload the files to `plugins/cforms`
-2. Run the sql file `cforms/config/sql/cakeforms.sql`
+1. Upload the files to `app/Plugin/Cforms`
+2. Run the sql file `Cforms/Config/sql/cakeforms.sql`
 3. Login to Croogo and activate the plugin.
+4. **IMPORTANT:** until there is a fix, you must add your submission views to Croogo. Copy the directory contents from
+app/Plugin/Cforms/View/Elements/email/* to app/Plugin/Croogo/View/Plugin/Cforms/Emails/*
 
-Instructions
+Brokeded Stuffs
+-----------
+* See #4 above
+* Export not yet updated/fixed
+* Delete Submission not updated/fixed (soon, soon)
+* I recommend you get a BootstrapHelper working in your theme's CustomHelper. For simplicity's sake I used this BootstrapFormHelper:
+
+https://gist.github.com/Casmo/8349245/raw/f2c7b184dca43b0e5f5f9fa970649d8e8c835322/BootstrapFormHelper.php
+
+
+Usage
 -----------
 
 ### Creating Forms ###
@@ -40,7 +53,7 @@ Instructions
     * Field types are standard- as of right now if 'checkbox' is selected the required option will _not_ work- it won't cause any errors it just doesn't work right now.
     * If a field can have options(e.g. checkbox, select), you enter options as a comma separated list
 4. Add validation
-    * The standatd rules are included- if you want to edit the message displayed go to Extensions->Forms->Validation Rules. I recommend **not** deleting any of the rules.
+    * The standard rules are included- if you want to edit the message displayed go to Extensions->Forms->Validation Rules. I recommend **not** deleting any of the rules.
     * Two fields shown "DependsOn" and "DependsValue". These are basically used to make the fields required only if the field whose name is in the "DependsOn" section has the value of "DependsValue". I do have some Javascript set to automatically hide dependent fields unless they are required on the frontend.
 
 ### Displaying Forms ###
@@ -51,7 +64,7 @@ Forms can be displayed in two ways:
 
 #### In views (CURRENTLY NOT WORKING) ####
 1. Include the Cforms.Cforms Component
-2. This will automatically load the Cakform Helper.
+2. This will automatically load the Cakeform Helper.
 3. ...
 
 ### Exporting Form Data ###
@@ -73,9 +86,9 @@ component is included in the controller that the action points to.
 * Hide After Submission: Hides the form after it is successfully submitted.
 * Admin email: The email address to which form submissions are sent
 * From Email: The email address from which submissions are sent
-* Send Copy to Visitor (**Currently Not working**)
 
-Coming Soon
+Probably not Coming Soon
 -----------
+* Send Copy to Visitor
 * Multi-page forms
 * Autoresponder
