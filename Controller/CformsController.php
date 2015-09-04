@@ -38,8 +38,12 @@ class CformsController extends CformsAppController {
 
 
 	function admin_index() {
+		$this->set('title_for_layout', __d('cforms', 'Forms'));
+
 		$this->Cform->recursive = 0;
+		$this->paginate['Cform']['order'] = 'Cform.name ASC';
 		$this->set('cforms', $this->paginate());
+		$this->set('displayFields', $this->Cform->displayFields());
 	}
 
 	function admin_add() {

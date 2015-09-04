@@ -1,43 +1,79 @@
-<div class="cforms index">
-<h2><?php __('Cforms');?></h2>
-
-<div class="actions">    
-	<?php echo $this->Html->link(__('%s Add New Form', '<i class="icon icon-plus"></i>'), array('action' => 'add'),array('class' => 'btn btn-small','escape' => false)); ?>
-</div>
-
-<table class="table table-striped table-bordered">
-<tr>
-	<th><?php //echo $paginator->sort('name');?></th>
-	<th><?php //echo $paginator->sort('recipient');?></th>
-	<th class="actions"><?php __('Actions');?></th>
-</tr>
 <?php
-$i = 0;
-foreach ($cforms as $cform):
-	$class = null;
-	if ($i++ % 2 == 0) {
-		$class = ' class="altrow"';
-	}
+
+$this->extend('/Common/admin_index');
+
+$this->Html
+	->addCrumb('', '/admin', array('icon' => $this->Theme->getIcon('home')))
+	->addCrumb(__d('cforms', 'Forms'), '/' . $this->request->url);
+
+$this->append('actions');
+echo $this->Croogo->adminAction(
+	__d('croogo', 'Create form'),
+	array('action' => 'create'),
+	array('button' => 'success')
+);
+$this->end();
+
+$this->append('form-start', $this->Form->create(
+	'Cform',
+	array(
+		'url' => array('controller' => 'cforms', 'action' => 'process'),
+		'class' => 'form-inline'
+	)
+));
+
+$this->start('table-heading');
+$tableHeaders = $this->Html->tableHeaders(array(
+	$this->Form->checkbox('checkAll'),
+	$this->Paginator->sort('id', __d('croogo', 'Id')),
+	$this->Paginator->sort('name', __d('croogo', 'Name')),
+	$this->Paginator->sort('recipient', __d('croogo', 'Recipient')),
+	''
+));
+echo $this->Html->tag('thead', $tableHeaders);
+$this->end();
+
+$this->append('table-body');
 ?>
-	<tr<?php echo $class;?>>
-		<td>
-			<?php echo $this->Html->link($cform['Cform']['name'], array('action' => 'edit', $cform['Cform']['id'])); ?>
-		</td>
-		<td>
-			<?php echo $cform['Cform']['recipient']; ?>
-		</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View Submissions', true), array('controller' => 'submissions', 'action' => 'index', $cform['Cform']['id']),array('class' => 'btn btn-small')); ?>
-			<?php echo $this->Html->link(__('Export Records', true), array('controller' => 'submissions', 'action' => 'export', $cform['Cform']['id']),array('class' => 'btn btn-small')); ?>
-                        <?php echo $this->Html->link(__('Edit Form', true), array('action' => 'edit', $cform['Cform']['id']),array('class' => 'btn btn-small')); ?>
-			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $cform['Cform']['id']),array('class' => 'btn btn-small btn-danger'), sprintf(__('Are you sure you want to delete # %s?', true), $cform['Cform']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-</table>
-</div>
-<div class="paging">
-	<?php //echo $paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>
- | 	<?php //echo $paginator->numbers();?>
-	<?php //echo $paginator->next(__('next', true).' >>', array(), null, array('class' => 'disabled'));?>
-</div>
+	<tbody>
+	<?php foreach ($cforms as $cform): ?>
+		<tr>
+			<td><?php echo $this->Form->checkbox('Node.' . $cform['Cform']['id'] . '.id', array('class' => 'row-select')); ?></td>
+			<td><?php echo $cform['Cform']['id']; ?></td>
+			<td><?php echo $cform['Cform']['name']; ?></td>
+			<td><?php echo $cform['Cform']['recipient']; ?></td>
+			<td>
+				<div class="item-actions">
+					<?php
+					echo $this->Croogo->adminRowActions($cform['Cform']['id']);
+
+					echo ' ' . $this->Croogo->adminRowAction('',
+							array('controller' => 'submissions', 'action' => 'index', $cform['Cform']['id']),
+							array('icon' => $this->Theme->getIcon('delete'), 'tooltip' => __d('cforms', 'View Submissions'))
+						);
+
+					echo ' ' . $this->Croogo->adminRowAction('',
+							array('controller' => 'submissions', 'action' => 'export', $cform['Cform']['id']),
+							array('icon' => $this->Theme->getIcon('delete'), 'tooltip' => __d('cforms', 'Export Records'))
+						);
+
+					echo ' ' . $this->Croogo->adminRowAction('',
+							array('action' => 'edit', $cform['Cform']['id']),
+							array('icon' => $this->Theme->getIcon('update'), 'tooltip' => __d('cforms', 'Edit this item'))
+						);
+
+					echo ' ' . $this->Croogo->adminRowAction('',
+							array('action' => 'delete', $cform['Cform']['id']),
+							array('icon' => $this->Theme->getIcon('delete'), 'tooltip' => __d('cforms', 'Remove this item')),
+							__d('croogo', 'Are you sure?')
+						);
+					?>
+				</div>
+			</td>
+		</tr>
+	<?php endforeach ?>
+	</tbody>
+<?php
+$this->end();
+
+$this->append('form-end', $this->Form->end());
