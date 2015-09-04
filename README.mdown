@@ -1,16 +1,16 @@
 Cakeforms
 =============
 * Version: 2.0
-* Author: Sam Bernard (sam@sambernard.net), updated to CakePHP 2.x/Croogo 1.5.x by Peter Jacobson (dev@linkingarts.com)
+* Author: Sam Bernard (sam@sambernard.net), updated to CakePHP 2.x/Croogo 2.2.x by Wouter van Os (wouter@wouter0100.nl)
 * Website: <http://sambernard.net>
 
-An easy to use Croogo 1.5.x form plugin inspired by the amazing [Cforms] plugin for Wordpress.
+An easy to use Croogo 2.2.x form plugin inspired by the amazing [Cforms] plugin for Wordpress.
 
 [cforms]: http://www.deliciousdays.com/cforms-plugin/
 
 Requirements
 -----------
-* Croogo 1.5.x
+* Croogo 2.2.x
 
 Features
 -----------
@@ -27,24 +27,12 @@ Installation
 1. Upload the files to `app/Plugin/Cforms`
 2. Run the sql file `Cforms/Config/sql/cakeforms.sql`
 3. Login to Croogo and activate the plugin.
-4. **IMPORTANT:** until there is a fix, you must add your submission views to Croogo. Copy the directory contents from
-`app/Plugin/Cforms/View/Elements/email/*` to `app/Plugin/Croogo/View/Plugin/Cforms/Emails/*`
-
-Brokeded Stuffs
------------
-* See #4 above
-* Export not yet updated/fixed
-* Delete Submission not updated/fixed (soon, soon)
-* I recommend you get a BootstrapHelper working in your theme's CustomHelper. For simplicity's sake I used this BootstrapFormHelper:
-
-https://gist.github.com/Casmo/8349245/raw/f2c7b184dca43b0e5f5f9fa970649d8e8c835322/BootstrapFormHelper.php
-
 
 Usage
 -----------
 
 ### Creating Forms ###
-1. Go to Extensions->Forms->Create Form
+1. Go to Forms->Create Form
 2. Name Your Form
 3. Add fields
     * Field Name _should_ be unique- it probably won't mess anything up but only the last field with a name will be processed
@@ -62,15 +50,9 @@ Forms can be displayed in two ways:
 #### Inline in a Node ####
 1. In one of your nodes, add {cform_ID}, where ID is the id of the form you want to display.
 
-#### In views (CURRENTLY NOT WORKING) ####
-1. Include the Cforms.Cforms Component
-2. This will automatically load the Cakeform Helper.
-3. ...
-
 ### Exporting Form Data ###
 1. Go to the forms index(Extensions->Forms->List Forms)
 2. Click export next to the appropriate Form.
-
 
 ### Processing Form Data _(optional)_ ###
 * Create the function `beforeCformsSave(&$data)` in your controller/AppController- it is only called after the data has been validated but before
