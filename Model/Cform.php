@@ -39,4 +39,14 @@ class Cform extends CformsAppModel {
 		'Cforms.Submission'
 	);
 
+	/**
+	 * Display fields for this model
+	 *
+	 * @var array
+	 */
+	protected $_displayFields = array(
+		'id',
+		'name',
+		'recipient',
+	);
 }

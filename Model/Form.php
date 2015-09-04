@@ -3,7 +3,7 @@ class Form extends CformsAppModel {
 
 	public $name = 'Form';
 	
-        public $useTable = false;
+	public $useTable = false;
 
 	public $dependsOn = array();
 	

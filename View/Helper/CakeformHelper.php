@@ -30,14 +30,13 @@ class CakeformHelper extends AppHelper {
     function insert($formData){
         if(!($formData['Cform']['submitted'] == true && $formData['Cform']['hide_after_submission'] == true)){
 
-            $this->Html->script(array('/cforms/js/form/form.js'), array('once' => true,
-                                                                        'inline' => false));
-            
+            $this->Html->script(array('/cforms/js/form/form.js'), array('once' => true, 'inline' => false));
+
             $out = '';
 
-	    if($formData['Cform']['submitted'] == true){
-		$out .= "<div class='form-success'>" . $formData['Cform']['success_message'] . "</div>";
-	    }
+            if($formData['Cform']['submitted'] == true){
+                $out .= "<div class='form-success'>" . $formData['Cform']['success_message'] . "</div>";
+            }
 
             if(!empty($formData['Cform'])){
                 if(!empty($formData['Cform']['action'])){
@@ -57,24 +56,23 @@ class CakeformHelper extends AppHelper {
 
                 if(isset($formData['FormField'])){
                     foreach($formData['FormField'] as $field){
-                        $out .= '<div class="form-group">'.$this->field($field).'</div>';
+                        $out .= '<div class="form-group">'.$this->renderField($field).'</div>';
                     }
                 }
 
 
-            if($this->openFieldset == true){
-                    $out .= "</fieldset>";
+                if($this->openFieldset == true){
+                        $out .= "</fieldset>";
+                }
+
+                $out .= $this->Form->end('Submit');
             }
 
-            $out .= $this->Form->end('Submit');
-            }
-			
             return $this->output($out);
-            
-
         } else {
-	    return $this->output("<div class='form-success'>" . $formData['Cform']['show_after_submission'] . "</div>");
-	}
+            return $this->output("<div class='form-success'>" . $formData['Cform']['show_after_submission'] . "</div>");
+        }
+
         return $this->output(' ');
     }
 
@@ -102,8 +100,8 @@ class CakeformHelper extends AppHelper {
                         $this->openFieldset = true;
 
                         if(!empty($field['name'])){
-                                $out .= "<legend>".Inflector::humanize($field['name'])."</legend>";
-                                $out .= $this->Form->hidden('fs_' . $field['name'], array('value' => $field['name']));
+                            $out .= "<legend>".Inflector::humanize($field['name'])."</legend>";
+                            $out .= $this->Form->hidden('fs_' . $field['name'], array('value' => $field['name']));
                         }
                     break;
 
@@ -115,19 +113,19 @@ class CakeformHelper extends AppHelper {
                         $options['type'] = $field['type'];
                         if(in_array($field['type'], array('select', 'checkbox', 'radio'))){
 
-                                if($field['type'] == 'checkbox'){
-                                    if(count($field['options']) > 1){
-                                            $options['type'] = 'select';
-                                            $options['multiple'] = 'checkbox';
-                                            $options['class'] = 'checkbox-inline';
-                                            $options['options'] = $field['options'];
-                                    } else {
-                                        $options['value'] = $field['name'];
-                                    }
-                                } else {
+                            if($field['type'] == 'checkbox'){
+                                if(count($field['options']) > 1){
+                                    $options['type'] = 'select';
+                                    $options['multiple'] = 'checkbox';
+                                    $options['class'] = 'checkbox-inline';
                                     $options['options'] = $field['options'];
-                                    $options['empty'] = 'select one';
+                                } else {
+                                    $options['value'] = $field['name'];
                                 }
+                            } else {
+                                $options['options'] = $field['options'];
+                                $options['empty'] = 'select one';
+                            }
 
                         }
 
@@ -140,9 +138,9 @@ class CakeformHelper extends AppHelper {
                         if(!empty($field['label'])){
                                 $options['label'] = $field['label'];
 
-				if($field['type'] == 'radio'){
-				    $options['legend'] = $field['label'];
-				}
+                                if($field['type'] == 'radio'){
+                                    $options['legend'] = $field['label'];
+                                }
                         }
 
                         if($field['type'] == 'radio' && count($field['options']) == 2 ){
