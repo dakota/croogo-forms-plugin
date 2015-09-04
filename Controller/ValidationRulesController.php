@@ -5,8 +5,12 @@ class ValidationRulesController extends CformsAppController {
 	public $helpers = array('Html', 'Form','Js');
         
 	function admin_index() {
+		$this->set('title_for_layout', __d('cforms', 'Validation Rules'));
+
 		$this->ValidationRule->recursive = 0;
-		$this->set('validationRules', $this->paginate());
+		$this->paginate['ValidationRule']['order'] = 'ValidationRule.name ASC';
+		$this->set('validationrules', $this->paginate());
+		$this->set('displayFields', $this->ValidationRule->displayFields());
 	}
 
 	function admin_view($id = null) {

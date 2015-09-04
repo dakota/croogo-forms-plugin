@@ -25,4 +25,9 @@ class ValidationRule extends CformsAppModel {
 		)
 	);
 
+	public $_displayFields = array(
+		'id',
+		'rule',
+		'message'
+	);
 }
