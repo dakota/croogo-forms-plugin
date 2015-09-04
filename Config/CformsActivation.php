@@ -47,23 +47,13 @@ class CformsActivation {
         $controller->Croogo->addAco('Submissions/admin_view');
         $controller->Croogo->addAco('Submissions/admin_delete');
 		$controller->Croogo->addAco('Submissions/view_upload');
-		
-		$this->Link = ClassRegistry::init('Menus.Link');
 
-		// Main menu: add an Example link
-		$mainMenu = $this->Link->Menu->findByAlias('main');
-		$this->Link->Behaviors->attach('Tree', array(
-			'scope' => array(
-				'Link.menu_id' => $mainMenu['Menu']['id'],
-			),
-		));
-		$this->Link->save(array(
-			'menu_id' => $mainMenu['Menu']['id'],
-			'title' => 'Contact Forms',
-			'link' => 'plugin:cforms/controller:cforms/action:index',
-			'status' => 1,
-			'class' => 'cforms',
-		));		
+		//db config
+		App::uses('CroogoPlugin', 'Extensions.Lib');
+		$CroogoPlugin = new CroogoPlugin();
+		$CroogoPlugin->migrate('Cforms');
+
+
     }
 /**
  * onDeactivate will be called if this returns true
@@ -85,6 +75,13 @@ class CformsActivation {
         $controller->Croogo->removeAco('Cforms');
         $controller->Croogo->removeAco('FormFields');
         $controller->Croogo->removeAco('Submissions');
+
+        //db config
+        App::uses('CroogoPlugin', 'Extensions.Lib');
+		$CroogoPlugin = new CroogoPlugin();
+		$CroogoPlugin->unmigrate('Cforms');
     }
+
+
 }
 ?>
