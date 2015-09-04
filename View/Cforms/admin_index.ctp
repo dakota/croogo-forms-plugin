@@ -14,17 +14,8 @@ echo $this->Croogo->adminAction(
 );
 $this->end();
 
-$this->append('form-start', $this->Form->create(
-	'Cform',
-	array(
-		'url' => array('controller' => 'cforms', 'action' => 'process'),
-		'class' => 'form-inline'
-	)
-));
-
 $this->start('table-heading');
 $tableHeaders = $this->Html->tableHeaders(array(
-	$this->Form->checkbox('checkAll'),
 	$this->Paginator->sort('id', __d('croogo', 'Id')),
 	$this->Paginator->sort('name', __d('croogo', 'Name')),
 	$this->Paginator->sort('recipient', __d('croogo', 'Recipient')),
@@ -38,7 +29,6 @@ $this->append('table-body');
 	<tbody>
 	<?php foreach ($cforms as $cform): ?>
 		<tr>
-			<td><?php echo $this->Form->checkbox('Node.' . $cform['Cform']['id'] . '.id', array('class' => 'row-select')); ?></td>
 			<td><?php echo $cform['Cform']['id']; ?></td>
 			<td><?php echo $cform['Cform']['name']; ?></td>
 			<td><?php echo $cform['Cform']['recipient']; ?></td>
@@ -75,5 +65,3 @@ $this->append('table-body');
 	</tbody>
 <?php
 $this->end();
-
-$this->append('form-end', $this->Form->end());
