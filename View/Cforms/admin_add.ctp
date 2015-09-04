@@ -1,13 +1,25 @@
-<div class="cforms form">
-<h2>Add New Form</h2>
-<div class="actions">
-    <ul>
-        <li><?php echo $this->Html->link(__('Back to Index', true), array('controller' => 'cforms', 'action' => 'index')); ?></li>
-    </ul>
-</div>
-<?php echo $this->Form->create('Cform');?>
-	<?php
-		echo $this->Form->input('name');
-	?>
-<?php echo $this->Form->end('Submit');?>
-</div>
+<?php
+$this->extend('/Common/admin_edit');
+
+$this->Html
+    ->addCrumb('', '/admin', array('icon' => $this->Theme->getIcon('home')))
+    ->addCrumb(__d('cforms', 'Forms'), array('controller' => 'cforms', 'action' => 'index'))
+    ->addCrumb(__d('cforms', 'Add'), '/' . $this->request->url);
+
+$this->append('tab-content');
+    echo $this->Form->input('name');
+$this->end();
+
+$this->start('panels');
+echo $this->Html->beginBox(__d('croogo', 'Actions')) .
+    $this->Form->button(__d('croogo', 'Next'), array('button' => 'success')) .
+    $this->Html->link(__d('croogo', 'Cancel'), array('action' => 'index'), array('class' => 'cancel btn btn-danger'));
+
+echo $this->Html->endBox();
+
+echo $this->Croogo->adminBoxes();
+
+$this->end();
+
+$this->append('form-end', $this->Form->end());
+?>

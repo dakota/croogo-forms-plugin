@@ -9,7 +9,7 @@ $this->Html
 $this->append('actions');
 echo $this->Croogo->adminAction(
 	__d('croogo', 'Create form'),
-	array('action' => 'create'),
+	array('action' => 'add'),
 	array('button' => 'success')
 );
 $this->end();
