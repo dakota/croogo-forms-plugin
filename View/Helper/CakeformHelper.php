@@ -44,7 +44,7 @@ class CakeformHelper extends AppHelper {
                     $action = '/' . $this->request->url;
                 }
 
-                $out .= $this->Form->create('Form', array('url' => $action, 'class' => 'form-horizontal', 'type' => 'file'));
+                $out .= $this->Form->create('Form', array('url' => $action, 'class' => 'contact-form', 'type' => 'file'));
                 $out .= $this->Form->hidden('Cform.id', array('value' => $formData['Cform']['id']));
                 $out .= $this->Form->hidden('Submission.cform_id', array('value' => $formData['Cform']['id']));
                 $out .= $this->Form->hidden('Submission.page', array('value' => (Router::url('',false))));
