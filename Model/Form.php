@@ -55,7 +55,7 @@ class Form extends CformsAppModel {
 						);
 					}
 				} elseif($field['required']){
-					$validate[$field['name']] = array('notEmpty');
+					$validate[$field['name']] = array('notBlank');
 				}
 				
 				if(!empty($field['depends_on']) && !empty($field['depends_value'])){

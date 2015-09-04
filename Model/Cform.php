@@ -3,7 +3,7 @@ class Cform extends CformsAppModel {
 
 	public $name = 'Cform';
 	public $validate = array(
-		'name' => array('notEmpty'),
+		'name' => array('notBlank'),
 		'recipient' => array('email' => array(
 						      'rule' => 'email',
 						      'message' => 'Please include a valid email address',

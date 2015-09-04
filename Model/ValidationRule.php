@@ -3,7 +3,7 @@ class ValidationRule extends CformsAppModel {
 
 	public $name = 'ValidationRule';
 	public $validate = array(
-		'rule' => array('notempty')
+		'rule' => array('notBlank')
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

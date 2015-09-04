@@ -3,7 +3,7 @@ class FormField extends CformsAppModel {
 
 	public $name = 'FormField';
 	public $validate = array(
-		'name' => array('notempty'),
+		'name' => array('notBlank'),
 		//'type' => array('notempty'),
 		'cform_id' => array('numeric'),
 		//'required' => array('boolean')
