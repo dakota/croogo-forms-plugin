@@ -39,12 +39,12 @@ $this->append('table-body');
 
 					echo ' ' . $this->Croogo->adminRowAction('',
 							array('controller' => 'submissions', 'action' => 'index', $cform['Cform']['id']),
-							array('icon' => $this->Theme->getIcon('delete'), 'tooltip' => __d('cforms', 'View Submissions'))
+							array('icon' => $this->Theme->getIcon('inbox'), 'tooltip' => __d('cforms', 'View Submissions'))
 						);
 
 					echo ' ' . $this->Croogo->adminRowAction('',
 							array('controller' => 'submissions', 'action' => 'export', $cform['Cform']['id']),
-							array('icon' => $this->Theme->getIcon('delete'), 'tooltip' => __d('cforms', 'Export Records'))
+							array('icon' => $this->Theme->getIcon('download-alt'), 'tooltip' => __d('cforms', 'Export Submissions'))
 						);
 
 					echo ' ' . $this->Croogo->adminRowAction('',
