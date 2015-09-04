@@ -2,14 +2,13 @@
 class CakeformHelper extends AppHelper {
     public $helpers = array('Html', 'Form');
 
-    public function beforeRender() {
-	if($this->request->params['plugin'] == 'cforms'){
-	    if($this->_View){
-                $this->Html->script(array('jquery.min.js', '/cforms/js/jquery-ui-1.8.1.custom.min.js'), array('once' => true,
-                                                                                                                 'inline' => false));
-		$this->Html->css('/cforms/css/ui-lightness/jquery-ui-1.8.1.custom', 'stylesheet', array('inline' => false));
-	    }
-	}
+    public function beforeRender($viewFile) {
+        if($this->request->params['plugin'] == 'cforms'){
+            if($this->_View){
+                $this->Html->script(array('jquery.min.js', '/cforms/js/jquery-ui-1.8.1.custom.min.js'), array('once' => true, 'inline' => false));
+                $this->Html->css('/cforms/css/ui-lightness/jquery-ui-1.8.1.custom', 'stylesheet', array('inline' => false));
+            }
+        }
     }
 
 /**
@@ -85,7 +84,7 @@ class CakeformHelper extends AppHelper {
  * @return string field html
  * @access public
  */
-    function field($field, $custom_options = array()){
+    function renderField($field){
         $options = array();
         $out = '';
 

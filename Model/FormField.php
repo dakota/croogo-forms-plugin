@@ -46,7 +46,7 @@ class FormField extends CformsAppModel {
 
 	public $multiTypes = array('checkbox', 'radio', 'select');
 
-	function beforeSave(){
+	function beforeSave($options = array()){
 		if(!empty($this->data['FormField']['name'])){
 			$this->data['FormField']['name'] = Inflector::slug($this->data['FormField']['name']);
 		}
