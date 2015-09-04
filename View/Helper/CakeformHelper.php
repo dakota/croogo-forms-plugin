@@ -152,7 +152,6 @@ class CakeformHelper extends AppHelper {
                                 $options['value'] = $field['default'];
                         }
 
-                        $options = Set::merge($custom_options, $options);
                         $out .= $this->Form->input($field['name'], $options);
                         break;
                 }
