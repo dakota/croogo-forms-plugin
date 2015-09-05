@@ -51,7 +51,7 @@ class CakeformHelper extends AppHelper {
                 $out .= $this->Form->hidden('Submission.ip', array('value' => $this->request->clientIp()));
                 $out .= $this->Form->hidden('Cform.submitHere', array('value' => true));
 
-                $out .= '<span class="reqtxt required">Indicates a required field.</span>';
+                $out .= '<span>' . __('* Indicates a required field.') . '</span>';
 
                 if(isset($formData['FormField'])){
                     foreach($formData['FormField'] as $field){
@@ -135,7 +135,7 @@ class CakeformHelper extends AppHelper {
                         }
 
                         if(!empty($field['label'])){
-                                $options['label'] = $field['label'];
+                                $options['label'] = $field['label'] . (($field['required']) ? ' *' : '');
 
                                 if($field['type'] == 'radio'){
                                     $options['legend'] = $field['label'];
