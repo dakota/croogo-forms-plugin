@@ -15,11 +15,11 @@ class Form extends CformsAppModel {
 
 	function dependsOn($field, $dependsOn, $dependsValue){
 		
-		if(isset($this->request->data[$this->name][$dependsOn]) && $this->request->data[$this->name][$dependsOn] == $dependsValue){
+		if(isset($this->data[$this->name][$dependsOn]) && $this->data[$this->name][$dependsOn] == $dependsValue){
 			return true;
 		} else {
 			unset($this->validate[$field]);
-			unset($this->request->data[$this->name][$field]);
+			unset($this->data[$this->name][$field]);
 			return true;
 		}
 	}
