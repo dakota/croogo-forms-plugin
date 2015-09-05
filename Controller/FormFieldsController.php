@@ -5,7 +5,7 @@ class FormFieldsController extends CformsAppController {
 	public $helpers = array('Html', 'Form','Js');
 
 	public function beforeFilter() {
-		$this->Security->unlockedActions = array('admin_delete');
+		$this->Security->unlockedActions = array('admin_delete', 'admin_sort');
 
 		parent::beforeFilter();
 	}
