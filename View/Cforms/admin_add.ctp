@@ -6,6 +6,8 @@ $this->Html
     ->addCrumb(__d('cforms', 'Forms'), array('controller' => 'cforms', 'action' => 'index'))
     ->addCrumb(__d('cforms', 'Add'), '/' . $this->request->url);
 
+$this->append('form-start', $this->Form->create('Cform'));
+
 $this->append('tab-content');
     echo $this->Form->input('name');
 $this->end();
