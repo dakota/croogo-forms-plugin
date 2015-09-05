@@ -2,7 +2,7 @@
 
 App::uses('CakeEmail', 'Network/Email');
 
-class CformsComponent extends Object{
+class CformsComponent extends Component {
 
     public $components = array('RequestHandler');
 
@@ -15,7 +15,7 @@ class CformsComponent extends Object{
     public $formData;
 
 /**
- * Holds the path to the view variable  in $this->request->controller->viewVars
+ * Holds the path to the view variable  in $this->controller->viewVars
  * which contains the {cform_ID} tag
  *
  * $this->viewVar = 'page/Page/content'
@@ -58,9 +58,8 @@ class CformsComponent extends Object{
  * @access public
  */
     public $submitted = false;
-		
-    public function beforeRedirect($controller, $url, $status=null, $exit=true){
-    }
+
+    public $controller;
 
 /**
  * Sets Controller values, loads Cform.Form model
@@ -70,8 +69,8 @@ class CformsComponent extends Object{
  * @access public
  *
  */
-    function initialize($controller, $settings = array()) {
-        $this->request->controller =& $controller;
+    function initialize(Controller $controller) {
+        $this->controller = $controller;
 
         $this->Form = ClassRegistry::init('Cforms.Form');
         $this->Submission = ClassRegistry::init('Cforms.Submission');
@@ -108,12 +107,12 @@ class CformsComponent extends Object{
  * @param object $controller Controller with components to startup
  * @return void
  */
-    function startup($controller){
-        $this->request->controller = $controller;
-        $this->request->controller->set('cformsComponent', 'CformsComponent startup');
-        $this->request->controller->helpers[] = "Cforms.Cakeform";
+    function startup(Controller $controller){
+        $this->controller = $controller;
+        $this->controller->set('cformsComponent', 'CformsComponent startup');
+        $this->controller->helpers[] = "Cforms.Cakeform";
 
-        if(!empty($this->request->controller->data['Cform']['submitHere']) && $this->request->controller->data['Cform']['id']){
+        if(!empty($this->controller->data['Cform']['submitHere']) && $this->controller->data['Cform']['id']){
             $this->submitted = $this->submit();
         }
     }
@@ -124,12 +123,12 @@ class CformsComponent extends Object{
  *
  * @access public
  */
-    function beforeRender($controller){
+    function beforeRender(Controller $controller){
         Configure::write('Admin.menus.cforms', 1);
         $controller->set('cformsHookBeforeRender', 'CformsHook beforeRender');
 
-        $this->request->controller = $controller;
-        if(!empty($this->viewVar) && in_array($this->request->controller->action, $this->actions)){
+        $this->controller = $controller;
+        if(!empty($this->viewVar) && in_array($this->controller->action, $this->actions)){
             if($this->getContent()){
                 $this->content = $this->insertForm($this->content);
             }
@@ -145,7 +144,7 @@ class CformsComponent extends Object{
     function getContent(){
         $content_to_replace = '';
         $keys = explode('/', $this->viewVar);
-        $this->content =& $this->request->controller->viewVars;
+        $this->content =& $this->controller->viewVars;
 
         foreach($keys as $key){
             $this->content =& $this->content[$key];
@@ -207,16 +206,16 @@ class CformsComponent extends Object{
         $content = '';
         
         App::uses('View','View');        
-		$viewClass = $this->request->controller->view;
+		$viewClass = $this->controller->view;
 		if ($viewClass != 'View') {
 			if (strpos($viewClass, '.') !== false) {
 				list($plugin, $viewClass) = explode('.', $viewClass);
 			}
 			$viewClass = 'View';
-			//App::import('View', $this->request->controller->view);
+			//App::import('View', $this->controller->view);
 		}
 
-        $View = new $viewClass($this->request->controller);
+        $View = new $viewClass($this->controller);
         $View->plugin = 'Cforms';
         $content = $View->element('form', array('formData' => $formData));
 
@@ -249,12 +248,12 @@ class CformsComponent extends Object{
  * @access public
  */
     function submit(){
-        $id = $this->request->controller->data['Cform']['id'];
+        $id = $this->controller->data['Cform']['id'];
 
         $this->loadForm($id);
         $uploadsProcessed = $this->_processUploads();
 
-        $validate = $this->request->controller->data;
+        $validate = $this->controller->data;
         foreach($validate['Form'] as $field){
             if(is_array($field)){
                 $field = implode("\n", $field);
@@ -263,42 +262,54 @@ class CformsComponent extends Object{
 
         $this->Form->set($validate);
         if($uploadsProcessed && $this->Form->validates()){
-            $form = Hash::merge($this->request->controller->data, $this->formData);
+            $form = Hash::merge($this->controller->data, $this->formData);
 
             if(!empty($form['Form']['email'])){
                 $form['Submission']['email'] = $form['Form']['email'];
             }
             $form['Submission']['cform_id'] = $id;
 
+            $event = new CakeEvent(
+                'Cforms.form.submit.beforeSave',
+                $this,
+                array('form' => $form)
+            );
+            $this->controller->getEventManager()->dispatch($event);
 
-            $controllerMethods = get_class_methods($this->request->controller);
-            $saveToDb = true;
-            if(in_array('beforeFormSave', $controllerMethods)) {
-                $saveToDb = $this->request->controller->beforeFormSave($form);
-            }
+            if(!$event->isStopped() && $this->Submission->submit($form)){
 
-            if($saveToDb && $this->Submission->submit($form)){
+                $event = new CakeEvent(
+                    'Cforms.form.submit.afterSave',
+                    $this,
+                    array(
+                        'submission_id' => $this->Submission->id,
+                        'form' => $form
+                    )
+                );
+                $this->controller->getEventManager()->dispatch($event);
 
-                if(in_array('afterFormSave', $controllerMethods)) {
-                    $this->request->controller->afterFormSave($this->Submission->id, $form);
-                } else {
-                    $this->request->controller->Session->setFlash(__("Thank you! Your form has been submitted."));
+                if (!isset($event->result['send'])) {
+                    $event->result['send'] = true;
+                }
+
+                if ($event->result['send']) {
+                    $this->controller->Session->setFlash(__("Thank you! Your form has been submitted."));
 
                     $this->send($form);
                 }
 
                 if(!empty($form['Cform']['redirect'])){
-                    $this->request->controller->redirect($form['Cform']['redirect']);
+                    $this->controller->redirect($form['Cform']['redirect']);
                 }
 
                 return true;
             } else {
-                $this->request->controller->Session->setFlash(__("There was a problem saving your submission. Please check for errors and try again."));
+                $this->controller->Session->setFlash(__("There was a problem saving your submission. Please check for errors and try again."));
 
                 return false;
             }
         } else {
-            $this->request->controller->Session->setFlash(__("There was a problem saving your submission. Please check this form for errors or omissions and try again."));
+            $this->controller->Session->setFlash(__("There was a problem saving your submission. Please check this form for errors or omissions and try again."));
             return false;
         }
     }
@@ -353,12 +364,12 @@ class CformsComponent extends Object{
  */
     private function _processUploads(){
         $files = array();
-        foreach($this->request->controller->data['Form'] as $key => $formField){
+        foreach($this->controller->data['Form'] as $key => $formField){
 
                 if( is_array($formField) && array_key_exists('tmp_name', $formField) && array_key_exists('name', $formField)){
 
                         if(empty($formField['tmp_name'])){
-                                $this->request->controller->data['Form'][$key] = null;
+                                $this->controller->data['Form'][$key] = null;
 
                         } else {
                                 $i = null;
@@ -395,7 +406,7 @@ class CformsComponent extends Object{
  * @param object $controller Controller with components to shutdown
  * @return void
  */
-    public function shutdown($controller) {
+    public function shutdown(Controller $controller) {
     }
 
 }
