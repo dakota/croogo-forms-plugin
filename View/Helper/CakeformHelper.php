@@ -69,7 +69,7 @@ class CakeformHelper extends AppHelper {
 
             return $this->output($out);
         } else {
-            return $this->output("<div class='form-success'>" . $formData['Cform']['show_after_submission'] . "</div>");
+            return $this->output("<div class='form-success'>" . $formData['Cform']['success_message'] . "</div>");
         }
 
         return $this->output(' ');
