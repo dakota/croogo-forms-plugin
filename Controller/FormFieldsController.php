@@ -107,19 +107,20 @@ class FormFieldsController extends CformsAppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-        function admin_sort(){
-            if($this->RequestHandler->isAjax()){
-		$order = 0;
-                foreach($this->request->data['FormField'] as $field){
-                    $this->FormField->create();
-                    $this->FormField->id = $field['id'];
-                    $this->FormField->saveField('order', $order);
-		    $order++;
-                }
-		$this->set('response', 'success');
-		$this->render('../../Plugin/Cforms/View/Elements/ajax_response');
-                return true;
-            }
-        }
+	function admin_sort(){
+		if($this->RequestHandler->isAjax()){
+			$order = 0;
+			foreach($this->request->data['FormField'] as $field){
+				$this->FormField->create();
+				$this->FormField->id = $field['id'];
+				$this->FormField->saveField('order', $order);
+				$order++;
+			}
 
+			$this->set('response', 'success');
+			$this->render('../../Plugin/Cforms/View/Elements/ajax_response');
+
+			return true;
+		}
+	}
 }
