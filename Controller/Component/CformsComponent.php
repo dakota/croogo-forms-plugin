@@ -114,7 +114,7 @@ class CformsComponent extends Object{
         $this->request->controller->helpers[] = "Cforms.Cakeform";
 
         if(!empty($this->request->controller->data['Cform']['submitHere']) && $this->request->controller->data['Cform']['id']){
-               $this->submit();
+            $this->submitted = $this->submit();
         }
     }
 
