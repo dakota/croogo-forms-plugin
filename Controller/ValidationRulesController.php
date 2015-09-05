@@ -60,7 +60,7 @@ class ValidationRulesController extends CformsAppController {
 			$this->Session->setFlash(__('Invalid id for ValidationRule', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		if ($this->ValidationRule->del($id)) {
+		if ($this->ValidationRule->delete($id)) {
 			$this->Session->setFlash(__('ValidationRule deleted', true));
 			$this->redirect(array('action' => 'index'));
 		}

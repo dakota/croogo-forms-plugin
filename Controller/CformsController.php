@@ -63,7 +63,7 @@ class CformsController extends CformsAppController {
 			$this->Session->setFlash(__('Invalid id for Form', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		if ($this->Cform->del($id)) {
+		if ($this->Cform->delete($id)) {
 			$this->Session->setFlash(__('Form deleted', true));
 			$this->redirect(array('action' => 'index'));
 		}
