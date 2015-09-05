@@ -28,11 +28,13 @@ class Form extends CformsAppModel {
 		
 		$notInput = array('fieldset', 'textonly');
 		App::import('Model', 'Cforms.Cform');
-                $this->Cform = new Cform;
+		$this->Cform = new Cform();
+
 		$cform = $this->Cform->find('first', array(
-						    'conditions' => array('Cform.id' => $id),
-						    'contain' => array('FormField', 'FormField.ValidationRule')
-						    ));
+			'conditions' => array('Cform.id' => $id),
+			'contain' => array('FormField', 'FormField.ValidationRule')
+		));
+
 		$schema = array();
 		$validate = array();
 		
