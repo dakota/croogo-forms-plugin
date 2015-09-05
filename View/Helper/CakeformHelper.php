@@ -5,7 +5,7 @@ class CakeformHelper extends AppHelper {
     public function beforeRender($viewFile) {
         if($this->request->params['plugin'] == 'cforms'){
             if($this->_View){
-                $this->Html->script(array('jquery.min.js', '/cforms/js/jquery-ui-1.8.1.custom.min.js'), array('once' => true, 'inline' => false));
+                $this->Html->script(array('/cforms/js/jquery-ui-1.8.1.custom.min.js'), array('once' => true, 'inline' => false));
                 $this->Html->css('/cforms/css/ui-lightness/jquery-ui-1.8.1.custom', 'stylesheet', array('inline' => false));
             }
         }
