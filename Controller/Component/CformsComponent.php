@@ -74,6 +74,7 @@ class CformsComponent extends Object{
         $this->request->controller =& $controller;
 
         $this->Form = ClassRegistry::init('Cforms.Form');
+        $this->Submission = ClassRegistry::init('Cforms.Submission');
 
         if(empty($settings)){
             Configure::load('Cforms.cforms');
@@ -256,86 +257,49 @@ class CformsComponent extends Object{
         $validate = $this->request->controller->data;
         foreach($validate['Form'] as $field){
             if(is_array($field)){
-                    $field = implode("\n", $field);
+                $field = implode("\n", $field);
             }
         }
 
         $this->Form->set($validate);
         if($uploadsProcessed && $this->Form->validates()){
-            $this->submitted = true;
-            $this->formData['Cform']['submitted'] = true;
-            if(!empty($this->formData['Cform']['next'])){
-                    $this->Session->write('Cform.form.' .  $id, $this->request->controller->data['Cform']);
-            } else {
-                if(!empty($this->request->controller->data['Form']['email'])){
-                        $this->request->data['Submission']['email'] = $this->request->controller->data['Form']['email'];
-                }
-                $this->request->data['Submission']['cform_id'] = $id;
+            $form = Hash::merge($this->request->controller->data, $this->formData);
 
-                App::import('Model', 'Cforms.Submission');
-                $this->Submission = new Submission;
-
-                $this->Submission->Cform->id = $id;
-                $formName = $this->Submission->Cform->field('name');
-
-                $this->request->data['Submission']['cform_id'] = $this->request->controller->data['Submission']['cform_id'];
-                $this->request->data['Submission']['name'] = $formName;
-                $this->request->data['Submission']['ip'] = ip2long($this->request->controller->data['Submission']['ip']);
-                $this->request->data['Submission']['page'] = (Router::url('',false));
+            if(!empty($form['Form']['email'])){
+                $form['Submission']['email'] = $form['Form']['email'];
+            }
+            $form['Submission']['cform_id'] = $id;
 
 
-                $controllerMethods = get_class_methods($this->request->controller);
-                $saveToDb = true;
-                if(in_array('beforeCformsSave', $controllerMethods))
-                {
-                    $saveToDb = $this->request->controller->beforeCformsSave($this->request->controller->data);
-                }
+            $controllerMethods = get_class_methods($this->request->controller);
+            $saveToDb = true;
+            if(in_array('beforeFormSave', $controllerMethods)) {
+                $saveToDb = $this->request->controller->beforeFormSave($form);
+            }
 
-                if($saveToDb && $this->Submission->submit($this->request->controller->data)){
-                    $this->request->data['Cform'] = $this->formData['Cform'];
-                    $this->request->controller->Session->setFlash("Thank you! Your form has been submitted.");
+            if($saveToDb && $this->Submission->submit($form)){
 
-                    if(in_array('afterCformsSave', $controllerMethods)) {
-                        $this->request->controller->afterCformsSave($this->request->controller->data);
-                    } else {
-                        //pr ($validate);
-                        //pr ($this->request->data);
-                        $response = $validate;
-                        $send_from = $this->request->data['Submission']['email'];
-                        $send_to = Configure::read('Site.email');
-                        $siteTitle = Configure::read('Site.title');
-                        //$this->send($this->request->controller->data);
-
-                        $email = new CakeEmail();
-                        $email->emailFormat('both')
-                            ->from($send_from)
-                            ->to($send_to)
-                            ->subject('[%s] New Form Submission', $siteTitle)
-                            ->template('Cforms.submission')
-                            ->viewVars(array(
-                                'content' => $this->request->data,
-                                'response' => $response,
-                                )
-                            )
-                            ->send();
-                        if ($email->send() == false){
-                            echo 'Could not send email';
-                        }
-                    }
-
-                    if(!empty($this->formData['Cform']['redirect'])){
-                            $this->request->controller->redirect($this->formData['Cform']['redirect']);
-                    }
-
-                    unset($this->request->controller->data);
-                    return true;
+                if(in_array('afterFormSave', $controllerMethods)) {
+                    $this->request->controller->afterFormSave($this->Submission->id, $form);
                 } else {
-                    $this->request->controller->Session->setFlash("There was a problem saving your submission. Please check for errors and try again.");
-                    return false;
+                    $this->request->controller->Session->setFlash(__("Thank you! Your form has been submitted."));
+
+                    $this->send($form);
                 }
+
+                if(!empty($form['Cform']['redirect'])){
+                    $this->request->controller->redirect($form['Cform']['redirect']);
+                }
+
+                return true;
+            } else {
+                $this->request->controller->Session->setFlash(__("There was a problem saving your submission. Please check for errors and try again."));
+
+                return false;
             }
         } else {
-            $this->request->controller->Session->setFlash("There was a problem saving your submission. Please check this form for errors or omissions and try again.");
+            $this->request->controller->Session->setFlash(__("There was a problem saving your submission. Please check this form for errors or omissions and try again."));
+            return false;
         }
     }
 /**
@@ -347,41 +311,27 @@ class CformsComponent extends Object{
  * @access public
  */
 	function send($response){
-/*
+        $email = new CakeEmail('default');
+        $email->emailFormat('both')
+            ->from($this->formData['Cform']['from'])
+            ->to($this->formData['Cform']['recipient'])
+            ->subject(__('[%s] New %s Submission', Configure::read('Site.title'), $response['Cform']['name']))
+            ->template('Cforms.submission')
+            ->viewVars(array(
+                'response' => $response,
+            ));
 
-    	$this->request->controller->set('response', $response);
-		$success = $this->Email->send();
-    	$this->request->controller->plugin = $plugin;
-        //$plugin = $this->request->controller->plugin;
-    	//$this->request->controller->plugin = 'cforms';
-*/
+        $success = true;
 
-        $send_from = $response['Form']['email'];
-        $send_to = Configure::read('Site.email');
-		$siteTitle = Configure::read('Site.title');
-		$email = new CakeEmail();
-		//try {
-			$email->emailFormat('both')
-				->from($send_from)
-				->to($send_to)
-				->subject('[%s] New Form Submission', $siteTitle)
-				->template('Cforms.submission')
-				->viewVars(array(
-					'response' => $response,
-					)
-				)
-				->send();
+        try {
+            $email->send();
+        } catch (SocketException $e) {
+            $this->Session->setFlash('Error sending contact notification: %s', $e->getMessage());
+            $this->log(sprintf('Error sending contact notification: %s', $e->getMessage()));
 
-		$success = $email->send();
-		if ($success = false){ 
-		//	catch (SocketException $e) {
-				$this->Session->setFlash('Error sending contact notification: %s', $e->getMessage());
-				$this->log(sprintf('Error sending contact notification: %s', $e->getMessage()));
-		//		$success = false;
-		//	}
-		} else {
-			$success = true;
-		}
+            $success = false;
+        }
+
         return $success;
 	}
 
