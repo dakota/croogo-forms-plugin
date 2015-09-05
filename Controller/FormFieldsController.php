@@ -4,6 +4,13 @@ class FormFieldsController extends CformsAppController {
 	public $name = 'FormFields';
 	public $helpers = array('Html', 'Form','Js');
 
+	public function beforeFilter() {
+		$this->Security->unlockedActions = array('admin_delete');
+
+		parent::beforeFilter();
+	}
+
+
 	function admin_add($formId = null) {
 		$response = false;
 
