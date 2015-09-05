@@ -1,7 +1,7 @@
 <h2>New "<?php echo $response['Cform']['name'];?>" Submission</h2>
 <strong>Submitted On</strong> <?php echo date('m/d/y \a\t h:i A');?><br />
 <strong>Page:</strong> <?php echo $response['Submission']['page'];?><br />
-<strong>IP:</strong> <?php echo long2ip($response['Submission']['ip']);?><br />
+<strong>IP:</strong> <?php echo $response['Submission']['ip'];?><br />
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 <table>
