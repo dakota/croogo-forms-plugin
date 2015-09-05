@@ -31,20 +31,20 @@ class FormField extends CformsAppModel {
 	);
 
 	public $types = array(
-			   'text' => 'Single Line of Text',
-			   'textarea' => 'Multiple Lines of Text',
-			   'textonly' => 'Text Only(no input)',
-			   'fieldset' => 'Fieldset',
-			   'select' => 'Select Box',
-			   'checkbox' => 'Checkboxes',
-			   'radio' => 'Radio Buttons',
-			   'file' => 'File Upload',
-			   'date' => 'Date Picker',
-			   'time' => 'Time Picker',
-			   'datetime' => 'Datetime Picker'
-			   );
+	   	'text' => 'Single Line of Text',
+	   	'textarea' => 'Multiple Lines of Text',
+	   	'textonly' => 'Text Only(no input)',
+	   	'fieldset' => 'Fieldset',
+	   	'select' => 'Select Box',
+	   	'checkbox' => 'Checkboxes',
+	   	'radio' => 'Radio Buttons',
+	   	'file' => 'File Upload',
+	   	'date' => 'Date Picker',
+	   	'time' => 'Time Picker',
+	   	'datetime' => 'Datetime Picker'
+   	);
 
-	public $multiTypes = array('checkbox', 'radio', 'select');
+	public $multiTypes = array('checkbox', 'radio', 'select', 'textonly');
 
 	function beforeSave($options = array()){
 		if(!empty($this->data['FormField']['name'])){

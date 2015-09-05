@@ -105,7 +105,7 @@ class CakeformHelper extends AppHelper {
                     break;
 
                     case 'textonly':
-                        $out = $this->Html->para('textonly', $field['label']);
+                        $out = $this->Html->para('textonly', $field['options']);
                     break;
 
                     default:
