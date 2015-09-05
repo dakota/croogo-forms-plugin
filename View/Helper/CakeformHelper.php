@@ -123,7 +123,6 @@ class CakeformHelper extends AppHelper {
                                 }
                             } else {
                                 $options['options'] = $field['options'];
-                                $options['empty'] = 'select one';
                             }
 
                         }
