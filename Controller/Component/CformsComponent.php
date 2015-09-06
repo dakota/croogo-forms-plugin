@@ -324,8 +324,8 @@ class CformsComponent extends Component {
 	function send($response){
         $email = new CakeEmail('default');
         $email->emailFormat('both')
-            ->from($this->formData['Cform']['from'])
-            ->to($this->formData['Cform']['recipient'])
+            ->from($response['Cform']['from'])
+            ->to($response['Cform']['recipient'])
             ->subject(__('[%s] New %s Submission', Configure::read('Site.title'), $response['Cform']['name']))
             ->template('Cforms.submission')
             ->viewVars(array(
