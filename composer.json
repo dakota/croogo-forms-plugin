@@ -1,0 +1,21 @@
+{
+    "name": "cvo-technologies/croogo-forms",
+    "description": "A forms plugin for Croogo",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Bernard",
+            "email": "sam@sambernard.net"
+        },
+        {
+            "name": "Wouter van Os",
+            "email": "w.vanos@cvo-technologies.com"
+        },
+        {
+            "name": "Marlin Cremers",
+            "email": "m.cremers@cvo-technologies.com"
+        }
+    ],
+    "require": {}
+}
