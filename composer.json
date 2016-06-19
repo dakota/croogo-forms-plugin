@@ -17,5 +17,14 @@
             "email": "m.cremers@cvo-technologies.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=5.5.9",
+        "cakephp/cakephp": "~3.2",
+        "croogo/croogo": "3.0.x-dev",
+    },
+    "autoload": {
+        "psr-4": {
+            "CvoTechnologies\\CroogoForms\\": "src"
+        }
+    }
 }
